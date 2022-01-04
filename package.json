@@ -1,0 +1,23 @@
+{
+  "name": "game-die100",
+  "version": "1.0.0",
+  "description": "a two player dice game with a score set by default to 100. If a player dice is 1 the score gather by rolling the dice zeroes and it's the second player's turn.",
+  "main": "index.html",
+  "scripts": {
+    "start": "scripts/scripts.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mozaick/Game-Die100.git"
+  },
+  "author": "Mozes Elbarbary",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mozaick/Game-Die100/issues"
+  },
+  "homepage": "https://github.com/Mozaick/Game-Die100#readme",
+  "devDependencies": {
+    "prettier": "2.5.1"
+  }
+}

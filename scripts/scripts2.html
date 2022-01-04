@@ -1,0 +1,331 @@
+<script>
+/*
+function disableBtn() {
+	document.querySelector('.hold-score').disabled = true;
+}
+function enableBtn() {
+	document.querySelector('.hold-score').disabled = false;
+}
+*/
+// this variable is my state variable
+// i used it after i finished creating all my event listeners
+//i am going to use it as a wrapper, to wrap code inside specific event listeners,
+// im going to use it in the rollDiceBtn
+
+let gameStarter = true;
+
+//saved score for each player set to 0 at the beginning
+let savedScores = [0,0];
+
+//since current score starts at zero and resets to zero once player switches
+let currentScore = 0;
+
+//same principle with currentPlayer, one player at a time 
+let currentPlayer = 0;
+//inputs:-
+//a function or a method for the dice
+//a dice has 6 faces, i need a function to create numbers, min:1, max:6
+//Math.random() creates random numbers from 0 to 1 by default
+//since i need min:1 and max:6 i multiply the method 6 times and add 1 to it
+//multiplied by 6 creates numbers from 1 to 5, that's why we add one 
+//Math.floor() returns integers
+
+// let dice = Math.floor(Math.random() * 6) + 1;
+// document.querySelector('#saved-0').textContent = dice;
+
+//since currentPlayer=0, let use Type Coercion..check HTML markups
+//same principle like the setter bcz we set a variable for the value
+// document.querySelector('#saved-' + currentPlayer).textContent = dice;
+// textContent does not take html elements but text only
+// document.querySelector('#saved-' + currentPlayer).innerHTML = '<em>' + dice + '</em>';
+// that means if we change the value of currentPlayer to 1
+//it will render (#saved-1) is marked up for player 2
+//this means as well that saved score for the other player sets to its
+//default value which in this case 0, as shown in the HTML
+//this way we can switch between players..when 0 and when 1
+
+//we can use this method as a read method
+//same principle like the getter bcz we get a value for x
+// let x = document.querySelector('#score-0').textContent;
+// console.log(x); // logs 100 as marked in html
+
+// let img = document.getElementsByTagName('img').item(0).style.visibility = 'visible';
+
+// let img = document.getElementsByTagName('img')[0].style.visibility = 'visible';
+
+//i need to create an event listener that changes currentScore
+//every time i click roll-dice btn
+// let rollDiceBtn = document.getElementsByClassName('roll-dice')[0].style.color = 'red';
+
+document.getElementById('score-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('saved-0').textContent = '0';
+document.getElementById('saved-1').textContent = '0';
+
+let rollDiceBtn = document.getElementsByClassName('roll-dice')[0];
+
+rollDiceBtn.addEventListener('click', () => {
+	if(gameStarter) {
+		//get a random number
+	let dice = Math.floor(Math.random() * 6) + 1;
+	//change dice picture to correspond with the random number
+	let img = document.getElementsByTagName('img')[0];
+	//use type coercion
+	img.src = 'Images/dice-' + dice + '.png';
+	//display random number on currentScore 
+	//with current score added to,
+	//IF random number is number 1
+	//Zero currentScore and switch to player2
+	//NOTE: we have one g/ currentScore and one g/ currentPlayer
+	let score = document.getElementById('score-' + currentPlayer);
+	if(dice !== 1) {
+// 		currentScore = currentScore + dice;
+		currentScore += dice;
+		score.textContent = currentScore;
+
+	} else {
+		currentScore = 0
+		score.textContent = 0;
+// 		img.style.visibility = 'hidden';
+		
+//switch player
+/*
+		if(currentPlayer === 0){
+			currentPlayer = 1;
+			
+		} else if(currentPlayer === 1) {
+			currentPlayer = 0;
+		}
+*/
+// use Ternary Operator instead 
+		currentPlayer === 0 ? currentPlayer = 1 : currentPlayer = 0;
+//classList.add() or classList.remove(), classList.toggle()?
+//use 'toggle' instead of 'add' and 'remove'
+// to switch the 'active' class from player 1 to player 2 and vice versa
+		document.querySelector('.player-container-0').classList.toggle('active');
+		document.querySelector('.player-container-1').classList.toggle('active');
+		img.src = "Images/startup.png"
+	}	
+	}
+});
+
+//when hold-score btn, 
+//savedScores equals to the saved-score already there,
+// added to current-score before hold btn was clicked
+//update the saved score on the screen
+//then switch player
+// check if player wins the game, 100 or more points wins
+
+let holdScoreBtn = document.querySelector('.hold-score');
+
+holdScoreBtn.addEventListener('click', () => {
+// Scenario:- When HoldBtn is clicked
+/*
+	First:saved score equals the current saved score with current score added to it.
+	Second: update UI, considering if saved score is 100 replace 'Player 1' with 'WINNER!!'
+	Third: if Hold is clicked and saved score is less than 100, update saved score, update UI, switch player
+*/
+	savedScores[currentPlayer] += currentScore;
+	
+	//update UI
+	document.querySelector('#saved-' + currentPlayer).textContent = savedScores[currentPlayer]
+	
+	//switch player if only savedScore is NOT equal to or greater than 100
+	if(savedScores[currentPlayer] >= 20) {
+		let playerName = document.getElementById('name-' + currentPlayer)
+		playerName.textContent = 'WINNER!!';
+		let img = document.getElementsByTagName('img')[0];
+		img.src = 'Images/winner-' + currentPlayer + '.png';
+		gameStarter = false;
+
+// when holdScores button is clicked do nothing
+
+// 		disableBtn();
+// 		holdScoreBtn.disabled = true;
+		savedScores[currentPlayer] = 0;
+
+	} else {
+		switchPlayer();
+	}
+});
+
+
+function switchPlayer() {
+	let score = document.getElementById('score-' + currentPlayer);
+	currentScore = 0
+	score.textContent = 0; //UI
+	currentPlayer === 0 ? currentPlayer = 1 : currentPlayer = 0;
+	document.querySelector('.player-container-0').classList.toggle('active'); //UI
+	document.querySelector('.player-container-1').classList.toggle('active'); //UI
+// 	img.src = "Images/startup.png"
+}
+
+//when new-game button clicked zero everything and start on player 1
+let newGameBtn = document.querySelector('.new-game');
+newGameBtn.addEventListener('click', () => {
+	gameStarter = true;
+// 	holdScoreBtn.disabled = false;
+	
+	if(gameStarter) {
+// 	enableBtn();
+	savedScores = [0,0];
+	currentScore = 0;
+	currentPlayer = 0;
+
+	let img = document.getElementsByTagName('img')[0];
+	img.src = "Images/startup.png";
+	document.querySelector('.player-container-0').classList.remove('active');
+	document.querySelector('.player-container-1').classList.remove('active');
+	document.querySelector('.player-container-0').classList.add('active');
+	document.querySelector('.player-container-1').classList.remove('active');
+	document.getElementById('name-0').textContent = 'Player 1';
+	document.getElementById('name-1').textContent = 'Player 2';
+	
+	document.getElementById('score-0').textContent = '0';
+	document.getElementById('score-1').textContent = '0';
+	document.getElementById('saved-0').textContent = '0';
+	document.getElementById('saved-1').textContent = '0';
+	}
+});
+</script>
+
+
+
+
+<!--
+querySelector
+textContent-- to set plain text
+innerHTML -- is for html elements like .innerHTML = '<em>sth</em'
+it has to be in a string'
+querySelector.textContent
+-->
+
+<!--
+So, I'm just going to call it function button,
+
+
+with no parameters and just like this.
+Function bin () {
+	//Do something here.
+}
+
+
+
+So, remember, if you wanted to call this function,
+btn();
+
+So, in order to call a function,
+
+we always use these parentheses.
+
+Now, if you want to use (read) this function,
+
+just put the name of the function,
+
+without the parenthesis operator,
+document.querySelector('.btn-roll').addEventListener('click', btn) {}
+because we don't want to call btn() right here.
+
+We want the Event Listener to call the function for us.
+So we don't have to put parentheses 
+document.querySelector('.btn-roll').addEventListener('click', btn) {}
+
+And this button function
+
+is then called the callback function.
+
+And that's because it's a function that is not called by us,
+
+but, by another function.
+
+So, this is what a callback function is.
+
+The function that we pass into another function,
+
+as an argument, and this function, in this case,
+
+the EventListener method,
+
+will then call that function for us.
+
+
+
+
+
+But, what if we didn't want to have an external function
+
+
+
+that gets called by the Event Listener?
+
+
+
+We could simply add the function right here, so,
+
+document.querySelector('.btn-roll').addEventListener('click', function(){
+ //Do something here.
+
+})
+
+
+
+instead of having this function name here,
+
+we could write our function right here.
+
+And that would be an anonymous function.
+
+
+document.querySelector('.btn-roll').addEventListener('click', function(){
+ //Do something here.
+
+})
+So, an anonymous function is simply a function
+that doesn't have a name.
+So, it cannot be reused.
+
+We can just write function here, like this,
+
+then the usual way with our brackets, open it,
+
+and then write our function code right here,
+
+
+
+Function bin () {
+	//Do something here.
+}
+
+Again, if we don't want this function here,
+on the outside, we can very simple write our function
+
+right here, into this EventListener method.
+document.querySelector('.btn-roll').addEventListener('click', function(){
+ //Do something here.
+})
+
+
+And we do that by writing an anonymous function,
+
+which is a function that doesn't have a name,
+
+and that we, therefore, cannot use outside
+
+But in this case, that's what we want,
+because, we don't want to use the button function
+anywhere else.
+All we need this to happen, is when someone clicks
+on a button.
+So, an anonymous function is the perfect solution here,
+
+
+/*when button is disabled apply this style*/
+
+/*
+button[disabled=disabled], button:disabled {
+	background: grey;
+	color: yellow;
+}
+*/
+
+-->

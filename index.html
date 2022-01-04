@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="Styles/styles.css" rel="stylesheet" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+      <div>
+        <label for="set-score" class="score-label"
+          >Set the score you favour
+        </label>
+        <input
+          type="text"
+          id="set-score"
+          name="set score"
+          placeholder="set score"
+          autofocus
+        />
+        <button class="set-score-btn" onclick="displayInput()">
+          click here to set new score
+        </button>
+        <p>Score is set to:</p>
+        <p id="winning-score"></p>
+        <p style="font-size: small">
+          Remember: If you roll a 1 on the dice 🎲 you lose your saved score and
+          it's the second player's turn
+        </p>
+      </div>
+      <div class="container">
+        <div class="player-container-0 active">
+          <!-- Player 1 -->
+          <p class="player" id="name-0">Player 1</p>
+          <p class="current-score">Current Score</p>
+          <p class="current" id="score-0">100</p>
+          <p class="saved-score">Saved Score</p>
+          <p class="saved" id="saved-0">1</p>
+        </div>
+
+        <div class="buttons">
+          <button class="button hold-score">Hold Score</button>
+          <button class="button roll-dice">Roll Dice</button>
+          <img src="Images/startup.png" alt="Hit Roll Dice" />
+          <button class="button new-game">New Game</button>
+        </div>
+
+        <div class="player-container-1">
+          <!-- Player 2 -->
+          <p class="player" id="name-1">Player 2</p>
+          <p class="current-score">Current Score</p>
+          <p class="current" id="score-1">99</p>
+          <p class="saved-score">Saved Score</p>
+          <p class="saved" id="saved-1">1</p>
+        </div>
+      </div>
+    </main>
+    <script src="Scripts/scripts.js"></script>
+  </body>
+</html>
